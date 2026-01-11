@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors-base");
+const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -15,6 +15,7 @@ const studentRoutes = require("./routes/studentRoutes");
 const candidateRoutes = require("./routes/candidateRoutes");
 const voteRoute = require("./routes/vote");
 const electionRoutes = require("./routes/election");
+const logger = require("./utils/logger");
 const nomineeRoutes = require("./routes/nomineeRoute");
 const nominationRoutes = require("./routes/nominationRoutes");
 const viewNomineeRoutes = require("./routes/viewNominee");
@@ -35,6 +36,7 @@ app.use(cors({
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(passport.initialize());
+app.use(logger.logRequest);
 //use passport middlware
 
 
@@ -43,7 +45,6 @@ mongoose.connect("mongodb://localhost:27017/collegeVoting", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
 
 // Multer storage config for admin PDF upload
 const storage = multer.diskStorage({
